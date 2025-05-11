@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+*.log
+
+# 仮想環境
+auth_functions/venv/
+streamlit_app/venv/
+venv/ # ルートに作成する場合も
+
+# 設定ファイル (機密情報を含む)
+auth_functions/.env
+# streamlit_app/.streamlit/secrets.toml # secrets.toml をGit管理するかはポリシーによる。
+                                     # GitHubにprivateリポジトリなら含めても良いが、
+                                     # publicリポジトリなら絶対に含めない。
+                                     # Cloud Run等では環境変数で設定推奨。
+
+# OS固有ファイル
+.DS_Store
+Thumbs.db
+
+# IDE/エディタ固有ファイル
+.vscode/
+.idea/
+*.swp
+
+# サービスアカウントキー (万が一プロジェクト内に置いた場合 - 非推奨)
+*.json

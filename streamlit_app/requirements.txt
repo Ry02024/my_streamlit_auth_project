@@ -1,0 +1,3 @@
+streamlit>=1.30.0,<1.46.0 # Streamlitのバージョン (適宜調整)
+PyJWT>=2.0,<2.9 # JWT検証用
+# requests # もしStreamlitアプリからHTTPリクエストを投げる必要があるなら

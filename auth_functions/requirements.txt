@@ -1,0 +1,10 @@
+Flask>=2.0,<3.3 # Flaskのバージョンは適宜調整
+google-cloud-firestore>=2.5,<2.15
+google-cloud-secret-manager>=2.5,<2.19
+google-auth-oauthlib>=0.5,<1.3
+PyJWT>=2.0,<2.9
+firebase-admin>=5.0,<6.6
+python-dotenv>=0.15,<1.1 # .env ファイル読み込み用
+functions-framework>=3.0,<3.6 # ローカルテスト及びデプロイ時にも使われる
+# requestsはgoogle-auth-oauthlibなどの依存関係で入ることが多いが明示してもよい
+# requests>=2.20,<2.32

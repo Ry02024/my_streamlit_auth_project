@@ -1,0 +1,40 @@
+# cloudbuild.yaml (例: プロジェクトルートに配置)
+steps:
+# auth_login 関数のデプロイ
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  args:
+  - 'functions'
+  - 'deploy'
+  - 'auth_login_route' # Cloud Function名 (エントリーポイント名と一致させる)
+  - '--gen2'
+  - '--region=${_REGION}' # ★ ユーザー定義の置換変数を使用 (下記参照)
+  - '--runtime=python310'
+  - '--source=./auth_functions' # cloudbuild.yamlから見たソースディレクトリ
+  - '--entry-point=auth_login_route' # main.py内のエントリーポイント関数名
+  - '--trigger-http'
+  - '--allow-unauthenticated'
+  # --- シークレットの設定 (Secret Managerのフルパスで指定) ---
+  - '--set-secrets=GOOGLE_CLIENT_ID=projects/${PROJECT_ID}/secrets/google-client-id/versions/latest,GOOGLE_CLIENT_SECRET=projects/${PROJECT_ID}/secrets/google-client-secret/versions/latest,JWT_SECRET_KEY=projects/${PROJECT_ID}/secrets/JWT_SECRET_KEY/versions/latest,STREAMLIT_APP_URL=projects/${PROJECT_ID}/secrets/STREAMLIT_APP_URL/versions/latest'
+  # --- 環境変数の設定 ---
+  - '--set-env-vars=GCP_PROJECT=${PROJECT_ID},FUNCTION_REGION=${_REGION},ENV=production'
+
+# auth_callback 関数のデプロイ
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  args:
+  - 'functions'
+  - 'deploy'
+  - 'auth_callback_route' # Cloud Function名
+  - '--gen2'
+  - '--region=${_REGION}' # ★ ユーザー定義の置換変数を使用
+  - '--runtime=python310'
+  - '--source=./auth_functions'
+  - '--entry-point=auth_callback_route'
+  - '--trigger-http'
+  - '--allow-unauthenticated'
+  - '--set-secrets=GOOGLE_CLIENT_ID=projects/${PROJECT_ID}/secrets/google-client-id/versions/latest,GOOGLE_CLIENT_SECRET=projects/${PROJECT_ID}/secrets/google-client-secret/versions/latest,JWT_SECRET_KEY=projects/${PROJECT_ID}/secrets/JWT_SECRET_KEY/versions/latest,STREAMLIT_APP_URL=projects/${PROJECT_ID}/secrets/STREAMLIT_APP_URL/versions/latest'
+  - '--set-env-vars=GCP_PROJECT=${PROJECT_ID},FUNCTION_REGION=${_REGION},ENV=production'
+timeout: '1200s'
+
+# (オプション) 置換変数のデフォルト値をここで定義することも可能
+# substitutions:
+#  _REGION: 'asia-northeast1' # デフォルトリージョン

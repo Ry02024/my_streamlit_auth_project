@@ -13,9 +13,8 @@ steps:
   - '--trigger-http'
   - '--allow-unauthenticated'
   - '--set-secrets=GOOGLE_CLIENT_ID=google-client-id:latest,GOOGLE_CLIENT_SECRET=google-client-secret:latest,JWT_SECRET_KEY=JWT_SECRET_KEY:latest,STREAMLIT_APP_URL=STREAMLIT_APP_URL:latest'
-  - '--set-env-vars=GCP_PROJECT=${PROJECT_ID},FUNCTION_REGION=${_REGION},ENV=production'
-  # (もし FUNCTION_BASE_URL を環境変数で明示的に設定するならここに追加。例: FUNCTION_BASE_URL=https://asia-northeast1-your-project-id.cloudfunctions.net)
-
+  - '--set-env-vars=GCP_PROJECT=${PROJECT_ID},FUNCTION_REGION=${_REGION},ENV=production,FUNCTION_BASE_URL=https://asia-northeast1-${PROJECT_ID}.cloudfunctions.net'
+    
 # auth_callback 関数のデプロイ
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   args:
@@ -30,6 +29,6 @@ steps:
   - '--trigger-http'
   - '--allow-unauthenticated' # Googleからなので認証不要
   - '--set-secrets=GOOGLE_CLIENT_ID=google-client-id:latest,GOOGLE_CLIENT_SECRET=google-client-secret:latest,JWT_SECRET_KEY=JWT_SECRET_KEY:latest,STREAMLIT_APP_URL=STREAMLIT_APP_URL:latest'
-  - '--set-env-vars=GCP_PROJECT=${PROJECT_ID},FUNCTION_REGION=${_REGION},ENV=production'
+  - '--set-env-vars=GCP_PROJECT=${PROJECT_ID},FUNCTION_REGION=${_REGION},ENV=production,FUNCTION_BASE_URL=https://asia-northeast1-${PROJECT_ID}.cloudfunctions.net'
 
 timeout: '1600s' # デプロイのタイムアウト時間 (秒)

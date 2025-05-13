@@ -32,3 +32,5 @@ steps:
   - '--set-env-vars=GCP_PROJECT=${PROJECT_ID},FUNCTION_REGION=${_REGION},ENV=production,FUNCTION_BASE_URL=https://asia-northeast1-${PROJECT_ID}.cloudfunctions.net'
 
 timeout: '1600s' # デプロイのタイムアウト時間 (秒)
+options: # ★★★ このoptionsセクションを追加 ★★★
+  logging: CLOUD_LOGGING_ONLY

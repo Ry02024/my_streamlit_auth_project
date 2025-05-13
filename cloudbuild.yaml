@@ -4,33 +4,35 @@ steps:
   args:
   - 'functions'
   - 'deploy'
-  - 'auth-login'  # ★ Cloud Function名 (ハイフン区切りを推奨)
+  - 'auth-login'
   - '--gen2'
-  - '--region=${_REGION}' # ★ Cloud Buildトリガーで設定する置換変数
-  - '--runtime=python310' # ★ Pythonランタイムバージョン (main.pyの環境と合わせる)
-  - '--source=./auth_functions' # cloudbuild.yamlから見たソースディレクトリ
-  - '--entry-point=auth_login_route' # main.py内のエントリーポイント関数名
+  - '--region=${_REGION}' # Cloud Buildトリガーで設定する置換変数
+  - '--runtime=python310'
+  - '--source=./auth_functions'
+  - '--entry-point=auth_login_route'
   - '--trigger-http'
   - '--allow-unauthenticated'
   - '--set-secrets=GOOGLE_CLIENT_ID=google-client-id:latest,GOOGLE_CLIENT_SECRET=google-client-secret:latest,JWT_SECRET_KEY=JWT_SECRET_KEY:latest,STREAMLIT_APP_URL=STREAMLIT_APP_URL:latest'
-  - '--set-env-vars=GCP_PROJECT=${PROJECT_ID},FUNCTION_REGION=${_REGION},ENV=production,FUNCTION_BASE_URL=https://asia-northeast1-${PROJECT_ID}.cloudfunctions.net'
-    
+  # ▼▼▼ FUNCTION_BASE_URL のリージョン部分を ${_REGION} に修正 ▼▼▼
+  - '--set-env-vars=GCP_PROJECT=${PROJECT_ID},FUNCTION_REGION=${_REGION},ENV=production,FUNCTION_BASE_URL=https://${_REGION}-${PROJECT_ID}.cloudfunctions.net'
+
 # auth_callback 関数のデプロイ
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   args:
   - 'functions'
   - 'deploy'
-  - 'auth-callback' # ★ Cloud Function名 (ハイフン区切りを推奨)
+  - 'auth-callback'
   - '--gen2'
   - '--region=${_REGION}'
   - '--runtime=python310'
   - '--source=./auth_functions'
   - '--entry-point=auth_callback_route'
   - '--trigger-http'
-  - '--allow-unauthenticated' # Googleからなので認証不要
+  - '--allow-unauthenticated'
   - '--set-secrets=GOOGLE_CLIENT_ID=google-client-id:latest,GOOGLE_CLIENT_SECRET=google-client-secret:latest,JWT_SECRET_KEY=JWT_SECRET_KEY:latest,STREAMLIT_APP_URL=STREAMLIT_APP_URL:latest'
-  - '--set-env-vars=GCP_PROJECT=${PROJECT_ID},FUNCTION_REGION=${_REGION},ENV=production,FUNCTION_BASE_URL=https://asia-northeast1-${PROJECT_ID}.cloudfunctions.net'
+  # ▼▼▼ FUNCTION_BASE_URL のリージョン部分を ${_REGION} に修正 ▼▼▼
+  - '--set-env-vars=GCP_PROJECT=${PROJECT_ID},FUNCTION_REGION=${_REGION},ENV=production,FUNCTION_BASE_URL=https://${_REGION}-${PROJECT_ID}.cloudfunctions.net'
 
-timeout: '1600s' # デプロイのタイムアウト時間 (秒)
-options: # ★★★ このoptionsセクションを追加 ★★★
+timeout: '1600s'
+options:
   logging: CLOUD_LOGGING_ONLY

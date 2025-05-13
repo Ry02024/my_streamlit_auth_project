@@ -4,32 +4,32 @@ steps:
   args:
   - 'functions'
   - 'deploy'
-  - 'auth-login'  # 関数名
+  - 'auth-login'
   - '--gen2'
-  - '--region=${_REGION}' # Cloud Buildトリガーで設定する置換変数
+  - '--region=us-central1' # ★ リージョンを直接指定 (成功した実績のあるリージョン)
   - '--runtime=python310'
-  - '--source=./auth_functions' # cloudbuild.yamlがプロジェクトルートにある場合、ソースディレクトリを指定
+  - '--source=./auth_functions'
   - '--entry-point=auth_login_route'
   - '--trigger-http'
   - '--allow-unauthenticated'
   - '--set-secrets=GOOGLE_CLIENT_ID=google-client-id:latest,GOOGLE_CLIENT_SECRET=google-client-secret:latest,JWT_SECRET_KEY=JWT_SECRET_KEY:latest,STREAMLIT_APP_URL=STREAMLIT_APP_URL:latest'
-  - '--set-env-vars=GCP_PROJECT=${PROJECT_ID},FUNCTION_REGION=${_REGION},ENV=production,FUNCTION_BASE_URL=https://${_REGION}-${PROJECT_ID}.cloudfunctions.net'
+  - '--set-env-vars=GCP_PROJECT=${PROJECT_ID},FUNCTION_REGION=us-central1,ENV=production,FUNCTION_BASE_URL=https://us-central1-${PROJECT_ID}.cloudfunctions.net'
 
 # auth_callback 関数のデプロイ
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   args:
   - 'functions'
   - 'deploy'
-  - 'auth-callback' # 関数名
+  - 'auth-callback'
   - '--gen2'
-  - '--region=${_REGION}' # Cloud Buildトリガーで設定する置換変数
+  - '--region=us-central1' # ★ リージョンを直接指定
   - '--runtime=python310'
-  - '--source=./auth_functions' # cloudbuild.yamlがプロジェクトルートにある場合、ソースディレクトリを指定
+  - '--source=./auth_functions'
   - '--entry-point=auth_callback_route'
   - '--trigger-http'
   - '--allow-unauthenticated'
   - '--set-secrets=GOOGLE_CLIENT_ID=google-client-id:latest,GOOGLE_CLIENT_SECRET=google-client-secret:latest,JWT_SECRET_KEY=JWT_SECRET_KEY:latest,STREAMLIT_APP_URL=STREAMLIT_APP_URL:latest'
-  - '--set-env-vars=GCP_PROJECT=${PROJECT_ID},FUNCTION_REGION=${_REGION},ENV=production,FUNCTION_BASE_URL=https://${_REGION}-${PROJECT_ID}.cloudfunctions.net'
+  - '--set-env-vars=GCP_PROJECT=${PROJECT_ID},FUNCTION_REGION=us-central1,ENV=production,FUNCTION_BASE_URL=https://us-central1-${PROJECT_ID}.cloudfunctions.net'
 
 timeout: '1600s'
 options:
